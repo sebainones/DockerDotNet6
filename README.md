@@ -1,3 +1,6 @@
+
+[![.NET](https://github.com/sebainones/DockerDotNet6/actions/workflows/dotnet.yml/badge.svg)](https://github.com/sebainones/DockerDotNet6/actions/workflows/dotnet.yml)
+
 # DockerDotNet6
 
 * This a very basic repo for learning and playing with **.NET 6** and coding it using **WSL** and VS Code just for fun.
