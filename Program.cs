@@ -1,5 +1,8 @@
 using Microsoft.OpenApi.Models;
 using Store.DB;
+using Microsoft.EntityFrameworkCore;
+using DockerDotNet;
+using DockerDotNet.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,10 +12,12 @@ var builder = WebApplication.CreateBuilder(args);
     //the controller-based web API wires up the controllers using the AddControllers method.
     services.AddControllers();
 
+    services.AddDbContext<PizzaDbContext>(options => options.UseInMemoryDatabase("items"));
+
     services.AddEndpointsApiExplorer();
     services.AddSwaggerGen(c =>
       {
-          c.SwaggerDoc("v1", new OpenApiInfo { Title = "Products API", Description = "Keep track of your tasks", Version = "v1" });
+          c.SwaggerDoc("v1", new OpenApiInfo { Title = "Products/Pizzas API", Description = "Some experimental API", Version = "v1" });
       });
 }
 
@@ -30,18 +35,54 @@ app.UseSwaggerUI(c =>
      c.SwaggerEndpoint("/swagger/v1/swagger.json", "Todo API V1");
   });
 
+
+//Pizzas Minimal API using real UseInMemoryDatabase
+//GET 
+
+app.MapGet("/pizzas", async (PizzaDbContext db) => await db.Pizzas.ToListAsync());
+
+//POST
+app.MapPost("/pizza", async (PizzaDbContext db, Pizza pizza) =>
+{
+    await db.Pizzas.AddAsync(pizza);
+    await db.SaveChangesAsync();
+    return Results.Created($"/pizza/{pizza.Id}", pizza);
+});
+
+//PUT
+
+app.MapPut("/pizza/{id}", async (PizzaDbContext db, Pizza updatepizza, int id) =>
+{
+      var pizza = await db.Pizzas.FindAsync(id);
+      if (pizza is null) return Results.NotFound();
+      pizza.Name = updatepizza.Name;
+      pizza.Description = updatepizza.Description;
+      await db.SaveChangesAsync();
+      return Results.NoContent();
+});
+
+//DELETE
+app.MapDelete("/pizza/{id}", async (PizzaDbContext db, int id) =>
+{
+   var pizza = await db.Pizzas.FindAsync(id);
+   if (pizza is null)
+   {
+      return Results.NotFound();
+   }
+   db.Pizzas.Remove(pizza);
+   await db.SaveChangesAsync();
+   return Results.Ok();
+});
+
+
 app.MapGet("/", () => "Hello World!");
 
-app.MapGet("/catalog", () => "some data");
-
-
-//Pizzas API
-
-app.MapGet("/pizzas/{id}", (int id) => PizzaDB.GetPizza(id));
-app.MapGet("/pizzas", () => PizzaDB.GetPizzas());
-app.MapPost("/pizzas", (Pizza pizza) => PizzaDB.CreatePizza(pizza));
-app.MapPut("/pizzas", (Pizza pizza) => PizzaDB.UpdatePizza(pizza));
-app.MapDelete("/pizzas/{id}", (int id) => PizzaDB.RemovePizza(id));
+//Pizzas Minimal API using custom Class doing something like InMemory
+app.MapGet("/inmemory/pizzas/{id}", (int id) => InMemoryPizzaDB.GetPizza(id));
+app.MapGet("/inmemory/pizzas", () => InMemoryPizzaDB.GetPizzas());
+app.MapPost("/inmemory/pizzas", (InMemoryPizza pizza) => InMemoryPizzaDB.CreatePizza(pizza));
+app.MapPut("/inmemory/pizzas", (InMemoryPizza pizza) => InMemoryPizzaDB.UpdatePizza(pizza));
+app.MapDelete("/inmemory/pizzas/{id}", (int id) => InMemoryPizzaDB.RemovePizza(id));
 
 //starts your API and makes it listen for requests from the client.
 app.Run();
