@@ -80,7 +80,7 @@ app.MapDelete("/pizza/{id}", async (PizzaDbContext db, int id) =>
 });
 
 
-app.MapGet("/", () => "Hello World!");
+app.MapGet("/", () => "Hello World sweet world!");
 
 //Pizzas Minimal API using custom Class doing something like InMemory
 app.MapGet("/inmemory/pizzas/{id}", (int id) => InMemoryPizzaDB.GetPizza(id));
