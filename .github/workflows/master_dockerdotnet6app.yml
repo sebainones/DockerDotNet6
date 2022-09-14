@@ -7,6 +7,8 @@ on:
   push:
     branches:
       - master
+
+# Allows you to run this workflow manually from the Actions tab      
   workflow_dispatch:
 
 jobs:
@@ -30,15 +32,15 @@ jobs:
       uses: docker/build-push-action@v2
       with:
         context: ./
-        push: true
         file: ./Dockerfile
-        tags: sebainones/sebainones/docker_dotnet6_app:latest
+        push: true        
+        tags: ${{ secrets.AzureAppService_ContainerUsername_be787e7656d846b5948d48b4759fbcd6 }}/docker_dotnet6_app:latest
         
         
     - name: Image digest
       run: echo ${{ steps.docker_build.outputs.digest }}
 
-  deployToAzure:
+  DeployToAzure🚀:
     runs-on: ubuntu-latest
     needs: build
     environment:
