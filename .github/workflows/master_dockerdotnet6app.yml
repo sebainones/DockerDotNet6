@@ -55,4 +55,4 @@ jobs:
         app-name: 'dockerdotnet6app'
         slot-name: 'production'
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_d25a63a49dfc4f1086c7588a8f23af3d }}
-        images: 'index.docker.io/${{ secrets.AzureAppService_ContainerUsername_be787e7656d846b5948d48b4759fbcd6 }}/sebainones/docker_dotnet6_app:${{ github.sha }}'
+        images: 'index.docker.io/${{ secrets.AzureAppService_ContainerUsername_be787e7656d846b5948d48b4759fbcd6 }}/docker_dotnet6_app:${{ github.sha }}'
