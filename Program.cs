@@ -6,13 +6,17 @@ using DockerDotNet.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
 // add services to DI container
 {
     var services = builder.Services;
     //the controller-based web API wires up the controllers using the AddControllers method.
     services.AddControllers();
 
-    services.AddDbContext<PizzaDbContext>(options => options.UseInMemoryDatabase("items"));
+    //Replace the in-memory database with a persistent database.
+    //services.AddDbContext<PizzaDbContext>(options => options.UseInMemoryDatabase("items"));
+    services.AddDbContext<PizzaDbContext>(opt =>
+            opt.UseNpgsql(builder.Configuration.GetConnectionString("ProductsDatabase")));
 
     services.AddEndpointsApiExplorer();
     services.AddSwaggerGen(c =>
@@ -27,12 +31,12 @@ var app = builder.Build();
 {
     // With minimal API, you add the route right away on the "app" instance
     app.MapControllers();
-} 
+}
 
 app.UseSwagger();
 app.UseSwaggerUI(c =>
   {
-     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Todo API V1");
+      c.SwaggerEndpoint("/swagger/v1/swagger.json", "Todo API V1");
   });
 
 
@@ -53,25 +57,25 @@ app.MapPost("/pizza", async (PizzaDbContext db, Pizza pizza) =>
 
 app.MapPut("/pizza/{id}", async (PizzaDbContext db, Pizza updatepizza, int id) =>
 {
-      var pizza = await db.Pizzas.FindAsync(id);
-      if (pizza is null) return Results.NotFound();
-      pizza.Name = updatepizza.Name;
-      pizza.Description = updatepizza.Description;
-      await db.SaveChangesAsync();
-      return Results.NoContent();
+    var pizza = await db.Pizzas.FindAsync(id);
+    if (pizza is null) return Results.NotFound();
+    pizza.Name = updatepizza.Name;
+    pizza.Description = updatepizza.Description;
+    await db.SaveChangesAsync();
+    return Results.NoContent();
 });
 
 //DELETE
 app.MapDelete("/pizza/{id}", async (PizzaDbContext db, int id) =>
 {
-   var pizza = await db.Pizzas.FindAsync(id);
-   if (pizza is null)
-   {
-      return Results.NotFound();
-   }
-   db.Pizzas.Remove(pizza);
-   await db.SaveChangesAsync();
-   return Results.Ok();
+    var pizza = await db.Pizzas.FindAsync(id);
+    if (pizza is null)
+    {
+        return Results.NotFound();
+    }
+    db.Pizzas.Remove(pizza);
+    await db.SaveChangesAsync();
+    return Results.Ok();
 });
 
 
