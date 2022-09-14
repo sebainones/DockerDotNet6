@@ -14,9 +14,10 @@ var builder = WebApplication.CreateBuilder(args);
     services.AddControllers();
 
     //Replace the in-memory database with a persistent database.
-    //services.AddDbContext<PizzaDbContext>(options => options.UseInMemoryDatabase("items"));
-    services.AddDbContext<PizzaDbContext>(opt =>
-            opt.UseNpgsql(builder.Configuration.GetConnectionString("ProductsDatabase")));
+    services.AddDbContext<PizzaDbContext>(options => options.UseInMemoryDatabase("items"));
+
+    // services.AddDbContext<PizzaDbContext>(opt =>
+    //         opt.UseNpgsql(builder.Configuration.GetConnectionString("ProductsDatabase")));
 
     services.AddEndpointsApiExplorer();
     services.AddSwaggerGen(c =>
