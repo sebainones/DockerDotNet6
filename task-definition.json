@@ -59,78 +59,15 @@
     ],
     "placementConstraints": [],
     "memory": "512",
-    "taskRoleArn": "arn:aws:iam::447392648140:role/DockerDotNet-RecipeAppIAMTaskRole35276CAE-T8B541LX6RFX",
-    "compatibilities": [
-      "EC2",
-      "FARGATE"
-    ],
-    "taskDefinitionArn": "arn:aws:ecs:eu-west-1:447392648140:task-definition/DockerDotNetRecipeAppTaskDefinitionF6707014:1",
-    "family": "DockerDotNetRecipeAppTaskDefinitionF6707014",
-    "requiresAttributes": [
-      {
-        "targetId": null,
-        "targetType": null,
-        "value": null,
-        "name": "com.amazonaws.ecs.capability.logging-driver.awslogs"
-      },
-      {
-        "targetId": null,
-        "targetType": null,
-        "value": null,
-        "name": "ecs.capability.execution-role-awslogs"
-      },
-      {
-        "targetId": null,
-        "targetType": null,
-        "value": null,
-        "name": "com.amazonaws.ecs.capability.ecr-auth"
-      },
-      {
-        "targetId": null,
-        "targetType": null,
-        "value": null,
-        "name": "com.amazonaws.ecs.capability.docker-remote-api.1.19"
-      },
-      {
-        "targetId": null,
-        "targetType": null,
-        "value": null,
-        "name": "com.amazonaws.ecs.capability.docker-remote-api.1.17"
-      },
-      {
-        "targetId": null,
-        "targetType": null,
-        "value": null,
-        "name": "com.amazonaws.ecs.capability.task-iam-role"
-      },
-      {
-        "targetId": null,
-        "targetType": null,
-        "value": null,
-        "name": "ecs.capability.execution-role-ecr-pull"
-      },
-      {
-        "targetId": null,
-        "targetType": null,
-        "value": null,
-        "name": "com.amazonaws.ecs.capability.docker-remote-api.1.18"
-      },
-      {
-        "targetId": null,
-        "targetType": null,
-        "value": null,
-        "name": "ecs.capability.task-eni"
-      }
-    ],
+    "taskRoleArn": "arn:aws:iam::447392648140:role/DockerDotNet-RecipeAppIAMTaskRole35276CAE-T8B541LX6RFX",      
+    "family": "DockerDotNetRecipeAppTaskDefinitionF6707014",   
     "pidMode": null,
     "requiresCompatibilities": [
       "FARGATE"
     ],
     "networkMode": "awsvpc",
     "runtimePlatform": null,
-    "cpu": "256",
-    "revision": 1,
-    "status": "ACTIVE",
+    "cpu": "256",        
     "inferenceAccelerators": null,
     "proxyConfiguration": null,
     "volumes": []
