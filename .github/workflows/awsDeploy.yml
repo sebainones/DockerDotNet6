@@ -27,8 +27,8 @@
 name: Deploy to Amazon ECS
 
 on:
-  push:
-    branches: [ "master" ]
+# Allows you to run this workflow manually from the Actions tab      
+  workflow_dispatch:
 
 env:
   AWS_REGION: eu-west-1                   # set this to your preferred AWS region, e.g. us-west-1

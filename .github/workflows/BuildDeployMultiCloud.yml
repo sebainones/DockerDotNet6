@@ -1,19 +1,37 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
+name: .NET Build & Deploy MultiCloud 🏗️ 📦
 
-name: Build and deploy container app to Azure Web App - dockerdotnet6app
-
-on: 
-
-# Allows you to run this workflow manually from the Actions tab      
-  workflow_dispatch:
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
 
 jobs:
-  docker-build:
-    runs-on: 'ubuntu-latest'
+  build:
+    runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+
+    - uses: actions/checkout@v3
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: 6.0.x
+
+    - name: 'Restore dependencies 📦'
+      run: dotnet restore ./DockerDotNet.csproj
+
+    - name: Build
+      run: dotnet build ./DockerDotNet.csproj --no-restore
+
+  docker-build:
+    runs-on: 'ubuntu-latest'
+    needs: build
+
+    steps:
+
+    - uses: actions/checkout@v3
 
     - name: Log in to registry
       uses: docker/login-action@v1
@@ -32,14 +50,13 @@ jobs:
         file: ./Dockerfile
         push: true        
         tags: ${{ secrets.AzureAppService_ContainerUsername_be787e7656d846b5948d48b4759fbcd6 }}/docker_dotnet6_app:latest
-        
-        
+                
     - name: Image digest
       run: echo ${{ steps.docker_build.outputs.digest }}
 
-  DeployToAzure:
+  'DeployToAzure ☁️':
     runs-on: ubuntu-latest
-    needs: build
+    needs: docker-build
     environment:
       name: 'production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}

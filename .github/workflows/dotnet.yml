@@ -1,10 +1,8 @@
-name: .NET
+name: .NET Build 🏗️
 
 on:
-  push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+# Allows you to run this workflow manually from the Actions tab      
+  workflow_dispatch:
 
 jobs:
   build:
@@ -17,7 +15,7 @@ jobs:
       uses: actions/setup-dotnet@v2
       with:
         dotnet-version: 6.0.x
-    - name: Restore dependencies
+    - name: 'Restore dependencies 📦'
       run: dotnet restore ./DockerDotNet.csproj
     - name: Build
       run: dotnet build ./DockerDotNet.csproj --no-restore
