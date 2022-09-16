@@ -1,6 +1,6 @@
 {
     "ipcMode": null,
-    "executionRoleArn": "arn:aws:iam::447392648140:role/DockerDotNet-RecipeAppTaskDefinitionExecutionRole3-135KS1I3TYJ4N",
+    "executionRoleArn": "arn:aws:iam::447392648140:role/DockerDotNet1-RecipeAppTaskDefinitionExecutionRole-6GZ4H3LND4S2",
     "containerDefinitions": [
       {
         "dnsSearchDomains": [],
@@ -9,7 +9,7 @@
           "logDriver": "awslogs",
           "secretOptions": [],
           "options": {
-            "awslogs-group": "DockerDotNet-RecipeAppTaskDefinitionAppContainerDefinitionLogGroupB92358ED-aKxCamWYam7n",
+            "awslogs-group": "DockerDotNet1-RecipeAppTaskDefinitionAppContainerDefinitionLogGroupB92358ED-sggRK5agVOOW",
             "awslogs-region": "eu-west-1",
             "awslogs-stream-prefix": "DockerDotNet"
           }
@@ -37,7 +37,7 @@
         "memoryReservation": null,
         "volumesFrom": [],
         "stopTimeout": null,
-        "image": "447392648140.dkr.ecr.eu-west-1.amazonaws.com/dockerdotnet:637988351262365657",
+        "image": "447392648140.dkr.ecr.eu-west-1.amazonaws.com/dockerdotnet-repo:637989207794755542",
         "startTimeout": null,
         "firelensConfiguration": null,
         "dependsOn": null,
@@ -59,8 +59,8 @@
     ],
     "placementConstraints": [],
     "memory": "512",
-    "taskRoleArn": "arn:aws:iam::447392648140:role/DockerDotNet-RecipeAppIAMTaskRole35276CAE-T8B541LX6RFX",      
-    "family": "DockerDotNetRecipeAppTaskDefinitionF6707014",   
+    "taskRoleArn": "arn:aws:iam::447392648140:role/DockerDotNet1-RecipeAppIAMTaskRole35276CAE-136VAKZPRGN08",
+    "family": "DockerDotNet1RecipeAppTaskDefinition41442737",
     "pidMode": null,
     "requiresCompatibilities": [
       "FARGATE"
