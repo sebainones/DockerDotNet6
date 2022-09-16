@@ -54,7 +54,7 @@ jobs:
     - name: Image digest
       run: echo ${{ steps.docker_build.outputs.digest }}
 
-  'DeployToAzure ☁️':
+  'DeployToAzure':
     runs-on: ubuntu-latest
     needs: docker-build
     environment:
