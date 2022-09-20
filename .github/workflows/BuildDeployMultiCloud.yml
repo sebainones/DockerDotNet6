@@ -143,8 +143,8 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ env.AWS_REGION }}
 
-    - name: echo_step_image
-      id: echo_step_image
+    - name: echo_step
+      id: echo_step
       run: echo "I'm showing test variable from previous job name ${{ needs.docker-build-push-ECR.outputs.output2 }}"
 
     - name: echo_step_image
