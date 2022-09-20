@@ -116,9 +116,7 @@ jobs:
         # be deployed to ECS.
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-        echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
-      outputs:
-        imageName: ${{ steps.build-image.outputs.image }} 
+        echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"   
         
 
   'DeployToAWS':
@@ -140,7 +138,7 @@ jobs:
 
     - name: echo_step
       id: echo_step
-      run: echo "I'm showing image name ${{ needs.build-image.outputs.imageName }}"
+      run: echo "I'm showing image name ${{ needs.build-image.outputs.image }}"
 
     - name: Fill in the new image ID in the Amazon ECS task definition
       id: task-def
@@ -148,7 +146,7 @@ jobs:
       with:
         task-definition: ${{ env.ECS_TASK_DEFINITION }}
         container-name: ${{ env.CONTAINER_NAME }}        
-        image: ${{ needs.build-image.outputs.imageName }}
+        image: ${{ needs.build-image.outputs.image }}
 
     - name: Deploy Amazon ECS task definition
       uses: aws-actions/amazon-ecs-deploy-task-definition@v1
