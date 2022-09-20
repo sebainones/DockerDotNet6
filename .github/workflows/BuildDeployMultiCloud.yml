@@ -89,6 +89,9 @@ jobs:
     runs-on: 'ubuntu-latest'
     needs: build
     environment: production
+     # Map a step output to a job output
+    outputs:
+      dockerImageName: ${{ steps.build-image.outputs.image }}
 
     steps:
     - name: Checkout
@@ -116,8 +119,8 @@ jobs:
         # be deployed to ECS.
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-        echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"   
-        
+        echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" 
+     
 
   'DeployToAWS':
     name: Deploy To AWS ECS
@@ -138,15 +141,15 @@ jobs:
 
     - name: echo_step
       id: echo_step
-      run: echo "I'm showing image name ${{ needs.build-image.outputs.image }}"
-
+      run: echo "I'm showing image name ${{ needs.docker-build-push-ECR.outputs.dockerImageName }}"
+       
     - name: Fill in the new image ID in the Amazon ECS task definition
       id: task-def
       uses: aws-actions/amazon-ecs-render-task-definition@v1
       with:
         task-definition: ${{ env.ECS_TASK_DEFINITION }}
         container-name: ${{ env.CONTAINER_NAME }}        
-        image: ${{ needs.build-image.outputs.image }}
+        image: ${{ needs.docker-build-push-ECR.outputs.dockerImageName }}
 
     - name: Deploy Amazon ECS task definition
       uses: aws-actions/amazon-ecs-deploy-task-definition@v1
