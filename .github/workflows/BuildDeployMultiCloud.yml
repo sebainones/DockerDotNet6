@@ -68,7 +68,7 @@ jobs:
     - name: Image digest
       run: echo ${{ steps.docker_build.outputs.digest }}
 
-  'DeployToAzure':
+  DeployToAzure:
     runs-on: ubuntu-latest
     needs: docker-build-push-DockerHub
     environment:
@@ -85,14 +85,14 @@ jobs:
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_d25a63a49dfc4f1086c7588a8f23af3d }}
         images: '${{ secrets.AzureAppService_ContainerUsername_be787e7656d846b5948d48b4759fbcd6 }}/docker_dotnet6_app:latest'
         
-  'docker-build-push-ECR':
+  docker-build-push-ECR:
     runs-on: 'ubuntu-latest'
+    # Map a step output to a job output
+    outputs:
+      dockerImageName: ${{ steps.build-image.outputs.imageName }}
     needs: build
     environment: production
-     # Map a step output to a job output
-    outputs:
-      dockerImageName: ${{ steps.build-image.outputs.image }}
-
+    
     steps:
     - name: Checkout
       uses: actions/checkout@v3
@@ -119,10 +119,10 @@ jobs:
         # be deployed to ECS.
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-        echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" 
+        echo "::set-output name=imageName::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" 
      
 
-  'DeployToAWS':
+  DeployToAWS:
     name: Deploy To AWS ECS
     runs-on: ubuntu-latest
     needs: docker-build-push-ECR
